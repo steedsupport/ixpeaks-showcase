@@ -207,6 +207,12 @@ h1 i{font-style:normal;color:var(--flame)}
 <section class="cta-block">
   <h2 class="disp">First Light FW26<br><span style="color:var(--flame)">now shipping.</span></h2>
   <a class="mail" href="mailto:hello@ixpeaks.com">Talk to us</a>
+<div class="fl-capture" style="margin-top:18px">
+  <form id="flForm" style="display:flex;gap:8px;max-width:340px;margin:0 auto">
+    <input type="email" required placeholder="Email for First Light access" style="flex:1;background:#1a1512;border:1px solid var(--line);color:var(--bone);padding:12px 14px;border-radius:9px;font-size:13px;font-family:inherit">
+    <button type="submit" style="background:var(--flame);color:#140b06;border:0;font-weight:800;padding:12px 16px;border-radius:9px;font-size:12px;letter-spacing:.05em;cursor:pointer">JOIN</button>
+  </form>
+</div>
   <p class="note">hello@ixpeaks.com · Vancouver, BC · 9 summits. One ascent.</p>
 </section>
 
@@ -292,6 +298,25 @@ function checkout() {
 let tt;
 function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('on'), 2200); }
 render('all'); sync();
+
+document.addEventListener('DOMContentLoaded', function(){
+  var f = document.getElementById('flForm');
+  if (f) f.addEventListener('submit', function(e){
+    e.preventDefault();
+    var em = f.querySelector('input[type="email"]');
+    var v = em ? em.value.trim() : '';
+    if (!v || v.indexOf('@') < 1) { toast('Please enter a valid email'); return; }
+    toast("You're on the First Light list");
+    f.reset();
+    try {
+      fetch('https://cavmauiemudjmqrvtmyj.supabase.co/rest/v1/waitlist', {
+        method: 'POST',
+        headers: { 'apikey': 'sb_publishable_6esXolHAGxrRKYXZAKR-CQ_yMUmmV9n', 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ email: v, source: 'mobile' })
+      }).then(function(){});
+    } catch (err) {}
+  });
+});
 </script>
 </body>
 </html>

@@ -1520,7 +1520,18 @@ document.addEventListener('DOMContentLoaded', () => {
   $('#modalClose') && $('#modalClose').addEventListener('click', closeModal);
   $('#modal') && $('#modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
   $('#wlForm') && $('#wlForm').addEventListener('submit', e => {
-    e.preventDefault(); closeModal(); toast('You\u2019re on the First Light list. Watch your inbox.');
+    e.preventDefault();
+    var em = $('#wlForm input[type="email"]');
+    var v = em ? em.value.trim() : '';
+    if (!v || v.indexOf('@') < 1) { toast('Please enter a valid email.'); return; }
+    closeModal(); toast('You\u2019re on the First Light list. Watch your inbox.');
+    try {
+      fetch('https://cavmauiemudjmqrvtmyj.supabase.co/rest/v1/waitlist', {
+        method: 'POST',
+        headers: { 'apikey': 'sb_publishable_6esXolHAGxrRKYXZAKR-CQ_yMUmmV9n', 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ email: v, source: location.hash.startsWith('#/') ? 'shop' : 'home' })
+      }).then(function(){});
+    } catch (err) {}
   });
   document.querySelectorAll('.shop-link').forEach(a => a.addEventListener('click', () => {
     document.querySelectorAll('.shop-link').forEach(x => x.classList.remove('on'));
